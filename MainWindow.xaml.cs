@@ -20,6 +20,7 @@ namespace XHair
         public MainWindow()
         {
             InitializeComponent();
+            Closed += OnWindowClosed;
         }
 
         private void SelectButton_Click(object sender, RoutedEventArgs e)
@@ -85,6 +86,11 @@ namespace XHair
             settingsWindow.Show();
             settingsWindow.Activate();
             settingsWindow.Focus();
+        }
+
+        private void OnWindowClosed(object? sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
