@@ -1,0 +1,9 @@
+﻿<Window x:Class="XHair.CrosshairWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CrosshairWindow" WindowState="Maximized" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Grid>
+        <Image Source="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="200"/>
+    </Grid>
+</Window>
+
