@@ -16,6 +16,8 @@ namespace XHair
         internal List<Window> crosshairWindows = new List<Window>();
         internal Dictionary<Window, Slider> windowSliders = new Dictionary<Window, Slider>();
         private Window? settingsWindow;
+        public bool useCustomFolder = false;
+        public string customFolderPath = "";
 
         public MainWindow()
         {
@@ -86,6 +88,11 @@ namespace XHair
             settingsWindow.Show();
             settingsWindow.Activate();
             settingsWindow.Focus();
+        }
+
+        public void SaveSettings()
+        {
+
         }
 
         private void OnWindowClosed(object? sender, EventArgs e)
