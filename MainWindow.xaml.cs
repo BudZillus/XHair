@@ -73,8 +73,13 @@ namespace XHair
         {
             if (settingsWindow == null)
             {
-                settingsWindow = new Window();
-                settingsWindow.Content = new SettingsPage();
+                settingsWindow = new Window
+                {
+                    Content = new SettingsPage(),
+                    Title = "Settings",
+                    Width = 400,
+                    Height = 300
+                };
                 settingsWindow.Closed += (s, e) => settingsWindow = null;
             }
             settingsWindow.Show();
