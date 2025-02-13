@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,7 +23,8 @@ namespace XHair
         public MainWindow()
         {
             InitializeComponent();
-            Closed += OnWindowClosed;
+            ReadSettings();
+            Closed += OnWindowCloseing;
         }
 
         private void SelectButton_Click(object sender, RoutedEventArgs e)
@@ -32,17 +34,14 @@ namespace XHair
 
         private void ShowCrosshairSelection()
         {
-            // Check if a CrosshairSelection window is already open
             var crosshairWindow = crosshairWindows.FirstOrDefault(w => w.Content is CrosshairSelection);
 
             if (crosshairWindow != null)
             {
-                // Bring the window to the front
                 crosshairWindow.Activate();
             }
             else
             {
-                // Create a new CrosshairSelection window
                 crosshairWindow = new Window
                 {
                     Content = new CrosshairSelection(),
@@ -51,16 +50,27 @@ namespace XHair
                     Height = 600
                 };
 
-                // Add the window to the list of CrosshairSelection windows
+                if (useCustomFolder)
+                {
+                    string folderPath = customFolderPath;
+                    string[] fileEntries = Directory.GetFiles(folderPath, "*.png");
+
+                    CrosshairSelection crosshairSelection = (CrosshairSelection)crosshairWindow.Content;
+                    foreach (string fileName in fileEntries)
+                    {
+                        BitmapImage image = new BitmapImage();
+                        image.BeginInit();
+                        image.UriSource = new Uri(fileName, UriKind.Absolute);
+                        image.EndInit();
+                        crosshairSelection.ImagePaths.Add(image);
+                    }
+                }
                 crosshairWindows.Add(crosshairWindow);
-
-                // Show the window
                 crosshairWindow.Show();
-
-                // Register the Closed event handler
                 crosshairWindow.Closed += (s, e) => CrosshairWindow_Closed(crosshairWindow, e, crosshairWindow);
             }
         }
+
 
         private void CrosshairWindow_Closed(Window sender, EventArgs e, Window crosshairWindow)
         {
@@ -90,12 +100,27 @@ namespace XHair
             settingsWindow.Focus();
         }
 
-        public void SaveSettings()
+        private void ReadSettings()
         {
-
+            string settingsFilePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings.ini");
+            if (File.Exists(settingsFilePath))
+            {
+                string[] lines = File.ReadAllLines(settingsFilePath);
+                foreach (string line in lines)
+                {
+                    if (line.StartsWith("useCustomFolder: "))
+                    {
+                        useCustomFolder = bool.Parse(line.Substring("useCustomFolder: ".Length));
+                    }
+                    else if (line.StartsWith("customFolderPath: "))
+                    {
+                        customFolderPath = line.Substring("customFolderPath: ".Length);
+                    }
+                }
+            }
         }
 
-        private void OnWindowClosed(object? sender, EventArgs e)
+        private void OnWindowCloseing(object? sender, EventArgs e)
         {
             Application.Current.Shutdown();
         }

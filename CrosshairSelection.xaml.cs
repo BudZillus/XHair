@@ -12,13 +12,13 @@ namespace XHair
     public partial class CrosshairSelection : Page
     {
         public ObservableCollection<BitmapImage> ImagePaths { get; set; }
-        private List<CrosshairWindow> _openWindows;
+        private List<CrosshairWindow> openWindows;
 
         public CrosshairSelection()
         {
             InitializeComponent();
             ImagePaths = new ObservableCollection<BitmapImage>();
-            _openWindows = new List<CrosshairWindow>();
+            openWindows = new List<CrosshairWindow>();
             DataContext = this;
             LoadImages();
         }
@@ -57,11 +57,11 @@ namespace XHair
         {
             if (sender is Image image && image.Source is BitmapImage bitmapImage)
             {
-                var existingWindow = _openWindows.FirstOrDefault(w => w.DataContext == bitmapImage);
+                var existingWindow = openWindows.FirstOrDefault(w => w.DataContext == bitmapImage);
                 if (existingWindow != null)
                 {
                     existingWindow.Close();
-                    _openWindows.Remove(existingWindow);
+                    openWindows.Remove(existingWindow);
                 }
                 else
                 {
@@ -70,18 +70,17 @@ namespace XHair
                         DataContext = bitmapImage
                     };
                     newWindow.Closed += (s, args) => CrosshairWindow_Closed(newWindow);
-                    _openWindows.Add(newWindow);
+                    openWindows.Add(newWindow);
                     newWindow.Show();
-
-                    // Slider und Label erstellen und hinzufügen
+                                        
                     string sliderName = $"Slider_{bitmapImage.UriSource.Segments.Last()}";
                     sliderName = sliderName.Replace(".", "_").Replace("-", "_").Replace("%20", "_").Replace(" ", "_");
                     sliderName = new string(sliderName.Where(char.IsLetterOrDigit).ToArray());
 
                     Slider imageSizeSlider = new Slider
                     {
-                        Minimum = 30,
-                        Maximum = 400,
+                        Minimum = 0,
+                        Maximum = 500,
                         Value = 200,
                         Width = 200,
                         Margin = new Thickness(0, 10, 0, 0),
@@ -235,8 +234,7 @@ namespace XHair
         {
             var mainWindow = (MainWindow?)Application.Current.MainWindow;
             if (mainWindow != null && mainWindow.windowSliders.TryGetValue(crosshairWindow, out Slider? slider))
-            {
-                // Entferne den Slider und das zugehörige Label
+            {                
                 var sliderPanel = mainWindow.sliderPanel;
                 var sliderBorder = (Border?)crosshairWindow.Tag;
                 if (sliderBorder != null)
@@ -247,7 +245,7 @@ namespace XHair
                 mainWindow.windowSliders.Remove(crosshairWindow);
             }                      
 
-            _openWindows.Remove(crosshairWindow);
+            openWindows.Remove(crosshairWindow);
         }   
     }
 }

@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\Crosshair\duck.png" />
     <None Remove="Images\Crosshair\focus %281%29.png" />
     <None Remove="Images\Crosshair\focus.png" />
     <None Remove="Images\Crosshair\focus2.png" />
     <None Remove="Images\Crosshair\line %281%29.png" />
     <None Remove="Images\Crosshair\line.png" />
     <None Remove="Images\Crosshair\target.png" />
+    <None Remove="Images\XHair.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,13 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Crosshair\duck.png" />
     <Resource Include="Images\Crosshair\focus (1).png" />
     <Resource Include="Images\Crosshair\focus.png" />
     <Resource Include="Images\Crosshair\focus2.png" />
     <Resource Include="Images\Crosshair\line (1).png" />
     <Resource Include="Images\Crosshair\line.png" />
     <Resource Include="Images\Crosshair\target.png" />
+    <Resource Include="Images\XHair.jpg" />
   </ItemGroup>
 
 </Project>

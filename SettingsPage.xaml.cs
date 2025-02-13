@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -12,6 +13,10 @@ namespace XHair
         public SettingsPage()
         {
             InitializeComponent();
+            if (mainWindow.customFolderPath != null)
+            {
+                userPathLabel.Content = mainWindow.customFolderPath;
+            }        
         }
 
         private void UserPath_Click(object sender, RoutedEventArgs e)
@@ -26,11 +31,26 @@ namespace XHair
             {                
                 mainWindow.useCustomFolder = true;
                 mainWindow.customFolderPath = folderPicker.FileName; 
-                mainWindow.SaveSettings();
+                SaveSettings();
+                MessageBox.Show("Custom folder selected: " + folderPicker.FileName);
+            }
+        }
 
-                // DEBUG
-                MessageBox.Show("Path set to: " + mainWindow.customFolderPath,
-                                "Done!", MessageBoxButton.OK, MessageBoxImage.Information);
+        private void SaveSettings()
+        {
+            string settingsFilePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings.ini");
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(settingsFilePath, false))
+                {
+                    writer.WriteLine("useCustomFolder: " + mainWindow.useCustomFolder);
+                    writer.WriteLine("customFolderPath: " + mainWindow.customFolderPath);
+                }
+                userPathLabel.Content = mainWindow.customFolderPath;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving settings: " + ex.Message);
             }
         }
     }
