@@ -71,7 +71,6 @@ namespace XHair
             }
         }
 
-
         private void CrosshairWindow_Closed(Window sender, EventArgs e, Window crosshairWindow)
         {
             if (windowSliders.TryGetValue(crosshairWindow, out Slider? slider) && slider != null)
@@ -103,18 +102,24 @@ namespace XHair
         private void ReadSettings()
         {
             string settingsFilePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings.ini");
-            if (File.Exists(settingsFilePath))
+            
+            if (File.Exists(settingsFilePath) && File.Exists(settingsFilePath))
             {
                 string[] lines = File.ReadAllLines(settingsFilePath);
                 foreach (string line in lines)
-                {
-                    if (line.StartsWith("useCustomFolder: "))
-                    {
-                        useCustomFolder = bool.Parse(line.Substring("useCustomFolder: ".Length));
-                    }
-                    else if (line.StartsWith("customFolderPath: "))
+                {                    
+                    if (line.StartsWith("customFolderPath: "))
                     {
                         customFolderPath = line.Substring("customFolderPath: ".Length);
+                        if(Directory.Exists(customFolderPath))
+                        {
+                            useCustomFolder = true;
+                        }
+                        else
+                        {
+                            customFolderPath = "";
+                            useCustomFolder = false;
+                        }
                     }
                 }
             }

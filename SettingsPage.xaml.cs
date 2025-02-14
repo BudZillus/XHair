@@ -43,7 +43,6 @@ namespace XHair
             {
                 using (StreamWriter writer = new StreamWriter(settingsFilePath, false))
                 {
-                    writer.WriteLine("useCustomFolder: " + mainWindow.useCustomFolder);
                     writer.WriteLine("customFolderPath: " + mainWindow.customFolderPath);
                 }
                 userPathLabel.Content = mainWindow.customFolderPath;

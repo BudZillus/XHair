@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace XHair
 {
@@ -56,7 +57,7 @@ namespace XHair
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (sender is Image image && image.Source is BitmapImage bitmapImage)
-            {
+            {        
                 var existingWindow = openWindows.FirstOrDefault(w => w.DataContext == bitmapImage);
                 if (existingWindow != null)
                 {
@@ -72,7 +73,7 @@ namespace XHair
                     newWindow.Closed += (s, args) => CrosshairWindow_Closed(newWindow);
                     openWindows.Add(newWindow);
                     newWindow.Show();
-                                        
+
                     string sliderName = $"Slider_{bitmapImage.UriSource.Segments.Last()}";
                     sliderName = sliderName.Replace(".", "_").Replace("-", "_").Replace("%20", "_").Replace(" ", "_");
                     sliderName = new string(sliderName.Where(char.IsLetterOrDigit).ToArray());
@@ -234,7 +235,7 @@ namespace XHair
         {
             var mainWindow = (MainWindow?)Application.Current.MainWindow;
             if (mainWindow != null && mainWindow.windowSliders.TryGetValue(crosshairWindow, out Slider? slider))
-            {                
+            {
                 var sliderPanel = mainWindow.sliderPanel;
                 var sliderBorder = (Border?)crosshairWindow.Tag;
                 if (sliderBorder != null)
@@ -243,9 +244,9 @@ namespace XHair
                 }
 
                 mainWindow.windowSliders.Remove(crosshairWindow);
-            }                      
+            }
 
             openWindows.Remove(crosshairWindow);
-        }   
+        }
     }
 }
