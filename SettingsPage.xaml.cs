@@ -52,5 +52,10 @@ namespace XHair
                 MessageBox.Show("Error saving settings: " + ex.Message);
             }
         }
+
+        private void SetHideKey_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("SetHideKey_Click");
+        }
     }
 }
